@@ -33,8 +33,8 @@ end
 
 
 farebox.rules =
-{{x=0,  y=-1,  z=0},
-      {x=0,  y=1,  z=0}}
+{{x=0,  y=-2,  z=0},
+      {x=0,  y=2,  z=0}}
 
 minetest.register_on_player_receive_fields(function(player, form, pressed)
 
@@ -109,3 +109,10 @@ minetest.register_node("farebox:farebox", {
 			  
 })
 
+minetest.register_craft({output = "farebox:farebox",
+			 recipe = {
+			    {"group:wood", "group:wood", "group:wood"},
+			    {"group:wood", "", "group:wood"},
+			    {"group:wood", "mesecons:mesecon", "group:wood"},
+			 }
+})
