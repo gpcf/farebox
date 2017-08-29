@@ -14,7 +14,7 @@ function farebox.show_formspec(pos, player)
       formspec = "size[8,10]"..
 	 "label[0.5,0.5; Entrance fee:]"..
 	 "list[nodemeta:" .. spos .. ";request;2.5,0.25;1,1;]" ..
-	 "button[6,0.25;2,1;open;Open]"..
+	 "button_exit[6,0.25;2,1;open;Open]"..
 	 "list[nodemeta:" .. spos .. ";main;0,1.5;8,4]"..
 	 "list[current_player;main;0,5.75;8,1;]"..
 	 "list[current_player;main;0,7;8,3;8]"..
@@ -23,8 +23,7 @@ function farebox.show_formspec(pos, player)
       formspec = "size[8,4]"..
 	 "label[0.5,1.5; Owner Wants:]"..
 	 "item_image_button[2.5,1.25;1,1;"..inv:get_stack("request",1):get_name()..";buy;\n\n\b\b\b\b\b"..inv:get_stack("request",1):get_count() .."]"..
-	 "label[3.5,1.5; (Click on the item to pay)]"..
-	 "listring[]"..      default.get_hotbar_bg(0, 4.25)
+	 "label[3.5,1.5; (Click on the item to pay)]"
    end
    minetest.after((0.1), function(gui)
 	 return minetest.show_formspec(player:get_player_name(), "farebox:"..spos,gui)
@@ -44,28 +43,30 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 	 local pinv=player:get_inventory()
 	 local meta = minetest.get_meta(pos)
 	 local inv = meta:get_inventory()
+	 local pname = player:get_player_name()
 	 local open = false
 	 if pressed.buy then
 	    if pinv:contains_item("main", inv:get_stack("request",1)) and inv:room_for_item("main", inv:get_stack("request",1)) then
 	       if not (creative and creative.is_enabled_for
-		       and creative.is_enabled_for(player:get_player_name())) then
+		       and creative.is_enabled_for(pname)) then
 		  pinv:remove_item("main", inv:get_stack("request",1))
 	       end
 	       inv:add_item("main", inv:get_stack("request",1))
 	       open = true
 	    elseif not pinv:contains_item("main", inv:get_stack("request",1)) then
-	       minetest.chat_send_player(player:get_player_name(), "You don't have enough items to enter")
+	       minetest.chat_send_player(pname, "You don't have enough items to enter")
 	    elseif not inv:room_for_item("main", inv:get_stack("request",1)) then
-	       minetest.chat_send_player(player:get_player_name(), "Owner's inventory is full")
+	       minetest.chat_send_player(pname, "Owner's inventory is full")
 	    end
 	 end
 	 if pressed.open or open then
-	    minetest.chat_send_player(player:get_player_name(), "Payment accepted.")
-	    mesecon.receptor_on(pos,farebox.rules)
-	    minetest.after(3, function (_)
+	    minetest.chat_send_player(pname, "Payment accepted.")
+	    mesecon.receptor_on(pos,farebox.rules)	    
+	    minetest.after(1, function (_)
 			      mesecon.receptor_off(pos,farebox.rules)
 
 	    end)
+	    minetest.close_formspec(pname, form)
 	 end
       end
 	 
