@@ -100,7 +100,6 @@ minetest.register_node("farebox:farebox", {
 			     
 			     local inv = meta:get_inventory()
 			     inv:set_size("request", 1)
-			     inv:set_size("drop", 1)
 			     inv:set_size("main", 32)
 			  end,
 
