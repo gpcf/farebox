@@ -36,12 +36,16 @@ farebox.rules =
       {x=0,  y=2,  z=0}}
 
 function farebox.open_faregate(pos)
-   minetest.swap_node(pos, {name="farebox:faregate_open"})
+   node = minetest.get_node(pos)
+   node.name = "farebox:faregate_open"
+   minetest.swap_node(pos, node)
    minetest.sound_play("doors_steel_door_open",
 		       {pos = pos, gain = 0.3, max_hear_distance = 10})
 end
 function farebox.close_faregate(pos)
-   minetest.swap_node(pos, {name="farebox:faregate"})
+   node = minetest.get_node(pos)
+   node.name = "farebox:faregate"
+   minetest.swap_node(pos, node)
    minetest.sound_play("doors_steel_door_close",
 			  {pos = pos, gain = 0.3, max_hear_distance = 10})
 end

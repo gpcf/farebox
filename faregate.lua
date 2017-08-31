@@ -8,6 +8,7 @@ minetest.register_node("farebox:faregate", {
 	},
 	drawtype = "nodebox",
 	paramtype = "light",
+	paramtype2 = "facedir",
 	description = "Faregate",
 	node_box = {
 		type = "fixed",
@@ -49,6 +50,7 @@ minetest.register_node("farebox:faregate_open", {
 	tiles = {
 	   "default_steel_block.png"
 	},
+	paramtype2 = "facedir",
 	description = "Open Faregate",
 	mesecons = {
 	   effector = {
