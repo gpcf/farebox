@@ -35,6 +35,17 @@ farebox.rules =
 {{x=0,  y=-2,  z=0},
       {x=0,  y=2,  z=0}}
 
+function farebox.open_faregate(pos)
+   minetest.swap_node(pos, {name="farebox:faregate_open"})
+   minetest.sound_play("doors_steel_door_open",
+		       {pos = pos, gain = 0.3, max_hear_distance = 10})
+end
+function farebox.close_faregate(pos)
+   minetest.swap_node(pos, {name="farebox:faregate"})
+   minetest.sound_play("doors_steel_door_close",
+			  {pos = pos, gain = 0.3, max_hear_distance = 10})
+end
+
 minetest.register_on_player_receive_fields(function(player, form, pressed)
 
       if string.sub(form,1,string.len("farebox:")) == "farebox:" then
@@ -44,6 +55,7 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 	 local meta = minetest.get_meta(pos)
 	 local inv = meta:get_inventory()
 	 local pname = player:get_player_name()
+	 local nodename = minetest.get_node(pos).name
 	 local open = false
 	 if pressed.buy then
 	    if pinv:contains_item("main", inv:get_stack("request",1)) and inv:room_for_item("main", inv:get_stack("request",1)) then
@@ -59,13 +71,17 @@ minetest.register_on_player_receive_fields(function(player, form, pressed)
 	       minetest.chat_send_player(pname, "Owner's inventory is full")
 	    end
 	 end
-	 if pressed.open or open then
+	 if pressed.open or open then	    
 	    minetest.chat_send_player(pname, "Payment accepted.")
-	    mesecon.receptor_on(pos,farebox.rules)	    
-	    minetest.after(1, function (_)
-			      mesecon.receptor_off(pos,farebox.rules)
-
-	    end)
+	    if nodename == "farebox:farebox" then
+	       mesecon.receptor_on(pos,farebox.rules)	    
+	       minetest.after(1, function (_)
+				 mesecon.receptor_off(pos,farebox.rules)
+				 
+	       end)
+	    elseif nodename == "farebox:faregate" then
+	       farebox.open_faregate(pos)
+	    end
 	    minetest.close_formspec(pname, form)
 	 end
       end
@@ -116,3 +132,5 @@ minetest.register_craft({output = "farebox:farebox",
 			    {"group:wood", "mesecons:mesecon", "group:wood"},
 			 }
 })
+local modpath = minetest.get_modpath("farebox")
+dofile(modpath .. "/faregate.lua")
