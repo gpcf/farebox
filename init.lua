@@ -97,9 +97,9 @@ end)
 minetest.register_node("farebox:farebox", {
 			  description = "Farebox",
 			  tiles = {
-			     "farebox_side.png", "farebox_side.png",
-			     "farebox_side.png", "farebox_side.png",
-			     "farebox_side.png", "farebox_front.png"
+			     "default_steel_block.png", "default_steel_block.png",
+			     "default_steel_block.png", "default_steel_block.png",
+			     "default_steel_block.png", "farebox_front.png"
 			  },
 			  paramtype2 = "facedir",
 			  groups = {cracky=2},
@@ -131,9 +131,9 @@ minetest.register_node("farebox:farebox", {
 
 minetest.register_craft({output = "farebox:farebox",
 			 recipe = {
-			    {"group:wood", "group:wood", "group:wood"},
-			    {"group:wood", "", "group:wood"},
-			    {"group:wood", "mesecons:mesecon", "group:wood"},
+			    {"default:steel_ingot", "default:steel_ingot", "default:steel_ingot"},
+			    {"default:steel_ingot", "", "default:steel_ingot"},
+			    {"default:steel_ingot", "mesecons:mesecon", "default:steel_ingot"},
 			 }
 })
 local modpath = minetest.get_modpath("farebox")

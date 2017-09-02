@@ -4,3 +4,5 @@ It also adds faregates that open when a payment is received and close
 when they receive a mesecons signal, i.e. from a pressure pad right
 behind them that verifies that the player has passed through the
 faregate.
+
+Farebox texture by azekillDIABLO
