@@ -119,6 +119,37 @@ minetest.register_on_leaveplayer(function(player)
 	farebox.players[player:get_player_name()] = nil
 end)
 
+
+can_dig = function(pos, player)
+		local meta = minetest.get_meta(pos)
+		local name = player:get_player_name()
+		local inv = meta:get_inventory()
+		if inv:is_empty("main") and inv:is_empty("request") and (meta:get_string("owner") == name or minetest.check_player_privs(name, {protection_bypass=true,})) then
+			return true
+		end
+		return false
+end	
+
+farebox.allow_metadata_inventory_take = function(pos, listname, index, stack, player)
+		local meta = minetest.get_meta(pos)
+		local name = player:get_player_name()
+		if meta:get_string("owner") == name or minetest.check_player_privs(name, {protection_bypass=true,}) then
+			return stack:get_count()
+		end
+		return 0
+end
+farebox.allow_metadata_inventory_put = function(pos, listname, index, stack, player)
+	return farebox.allow_metadata_inventory_take(pos, listname, index, stack, player)
+end
+farebox.allow_metadata_inventory_move = function(pos, from_list, from_index, to_list, to_index, count, player)
+	local meta = minetest.get_meta(pos)
+	local name = player:get_player_name()
+	if meta:get_string("owner") == name or minetest.check_player_privs(name, {protection_bypass=true,}) then
+		return count
+	end
+	return 0
+end
+		
 minetest.register_node("farebox:farebox", {
 	description = "Farebox",
 	tiles = {
@@ -141,17 +172,21 @@ minetest.register_node("farebox:farebox", {
 	after_place_node = function(pos, player, _)
 		local meta = minetest.get_meta(pos)
 		local player_name = player:get_player_name()
-
+		
 		meta:set_string("owner", player_name)
 		meta:set_string("infotext", "Owned by "..player_name)
-
+		
 		local inv = meta:get_inventory()
 		inv:set_size("request", 1)
 		inv:set_size("main", 32)
 	end,
+	allow_metadata_inventory_put = farebox.allow_metadata_inventory_put,
+	allow_metadata_inventory_take = farebox.allow_metadata_inventory_take,
+	allow_metadata_inventory_move = farebox.allow_metadata_inventory_move,
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 		farebox.show_formspec(pos, player)
 	end,
+	
 })
 
 minetest.register_craft({

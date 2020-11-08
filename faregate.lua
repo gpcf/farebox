@@ -43,7 +43,9 @@ minetest.register_node("farebox:faregate", {
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 	   farebox.show_formspec(pos, player)
 	end,
-	
+	allow_metadata_inventory_put = farebox.allow_metadata_inventory_put,
+	allow_metadata_inventory_take = farebox.allow_metadata_inventory_take,
+	allow_metadata_inventory_move = farebox.allow_metadata_inventory_move,
 })
 
 minetest.register_node("farebox:faregate_open", {			  
