@@ -19,6 +19,14 @@ minetest.register_node("farebox:faregate", {
 			{0.0625, -0.5, -0.0625, 0.4375, 0.6875, 0}, -- NodeBox7
 		}
 	},
+	collision_box = {
+		type = "fixed",
+		fixed = {
+			{-0.5, -0.5, -0.1, 0.5, 1.5, 0.1},
+			{-0.5, -0.5, -0.4375, -0.4375, 1.5, 0.4375}, -- NodeBox3
+			{0.4375, -0.5, -0.4375, 0.5, 1.5, 0.4375}, -- NodeBox5
+		},
+	},
 	mesecons = {
 	   effector = {
 	      rules = mesecon.rules.default,
@@ -46,6 +54,7 @@ minetest.register_node("farebox:faregate", {
 	allow_metadata_inventory_put = farebox.allow_metadata_inventory_put,
 	allow_metadata_inventory_take = farebox.allow_metadata_inventory_take,
 	allow_metadata_inventory_move = farebox.allow_metadata_inventory_move,
+	node_dig_prediction = "farebox:faregate",
 })
 
 minetest.register_node("farebox:faregate_open", {			  
@@ -73,7 +82,11 @@ minetest.register_node("farebox:faregate_open", {
 			{0.375, -0.5, -0.0625, 0.4375, 0.6875, 0.3125}, -- NodeBox7
 		}
 	},
-	drop = "farebox:faregate"
+	drop = "farebox:faregate",
+	allow_metadata_inventory_put = farebox.allow_metadata_inventory_put,
+	allow_metadata_inventory_take = farebox.allow_metadata_inventory_take,
+	allow_metadata_inventory_move = farebox.allow_metadata_inventory_move,
+	node_dig_prediction = "farebox:faregate",
 })
 
 minetest.register_craft({output = "farebox:faregate",

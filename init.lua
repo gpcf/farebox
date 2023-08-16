@@ -186,7 +186,7 @@ minetest.register_node("farebox:farebox", {
 	on_rightclick = function(pos, node, player, itemstack, pointed_thing)
 		farebox.show_formspec(pos, player)
 	end,
-	
+	node_dig_prediction = "farebox:farebox",
 })
 
 minetest.register_craft({
